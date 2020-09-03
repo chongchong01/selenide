@@ -134,8 +134,8 @@ public class FileDownloadToFolderTest extends IntegrationTest {
     Configuration.timeout = 1;
 
     File downloadedFile = $(byText("Download me")).download(using(FOLDER)
-      .filter(withExtension("txt"))
-      .timeout(4000)
+      .withFilter(withExtension("txt"))
+      .withTimeout(4000)
     );
 
     assertThat(downloadedFile.getName()).matches("hello_world.*\\.txt");

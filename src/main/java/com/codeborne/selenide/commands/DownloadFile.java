@@ -48,21 +48,22 @@ public class DownloadFile implements Command<File> {
     WebElement link = linkWithHref.findAndAssertElementIsInteractable();
     Config config = linkWithHref.driver().config();
     DownloadOptions options = getDownloadOptions(config, args);
+    long timeout = options.getTimeout(config.timeout());
 
     log.debug("Download file: {}", options);
 
-    switch (options.method()) {
+    switch (options.getMethod()) {
       case HTTPGET: {
-        return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, options.timeout(), options.filter());
+        return downloadFileWithHttpRequest.download(linkWithHref.driver(), link, timeout, options.getFilter());
       }
       case PROXY: {
-        return downloadFileWithProxyServer.download(linkWithHref, link, options.timeout(), options.filter());
+        return downloadFileWithProxyServer.download(linkWithHref, link, timeout, options.getFilter());
       }
       case FOLDER: {
-        return downloadFileToFolder.download(linkWithHref, link, options.timeout(), options.filter());
+        return downloadFileToFolder.download(linkWithHref, link, timeout, options.getFilter());
       }
       default: {
-        throw new IllegalArgumentException("Unknown file download mode: " + options.method());
+        throw new IllegalArgumentException("Unknown file download mode: " + options.getMethod());
       }
     }
   }
@@ -74,8 +75,8 @@ public class DownloadFile implements Command<File> {
       return (DownloadOptions) args[0];
     }
     return using(config.fileDownload())
-      .filter(getFileFilter(args))
-      .timeout(getTimeout(config, args));
+      .withFilter(getFileFilter(args))
+      .withTimeout(getTimeout(config, args));
   }
 
   @CheckReturnValue

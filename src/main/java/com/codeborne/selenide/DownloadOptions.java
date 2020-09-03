@@ -5,6 +5,8 @@ import com.codeborne.selenide.files.FileFilter;
 import static com.codeborne.selenide.files.FileFilters.none;
 
 public class DownloadOptions {
+  private static final long UNSPECIFIED_TIMEOUT = Long.MIN_VALUE;
+
   private final FileDownloadMode method;
   private final long timeout;
   private final FileFilter filter;
@@ -15,23 +17,23 @@ public class DownloadOptions {
     this.filter = filter;
   }
 
-  public FileDownloadMode method() {
+  public FileDownloadMode getMethod() {
     return method;
   }
 
-  public long timeout() {
-    return timeout;
+  public long getTimeout(long defaultValue) {
+    return timeout == UNSPECIFIED_TIMEOUT ? defaultValue : timeout;
   }
 
-  public FileFilter filter() {
+  public FileFilter getFilter() {
     return filter;
   }
 
-  public DownloadOptions timeout(long timeout) {
+  public DownloadOptions withTimeout(long timeout) {
     return new DownloadOptions(method, timeout, filter);
   }
 
-  public DownloadOptions filter(FileFilter filter) {
+  public DownloadOptions withFilter(FileFilter filter) {
     return new DownloadOptions(method, timeout, filter);
   }
 
@@ -41,6 +43,6 @@ public class DownloadOptions {
   }
 
   public static DownloadOptions using(FileDownloadMode method) {
-    return new DownloadOptions(method, -1, none());
+    return new DownloadOptions(method, UNSPECIFIED_TIMEOUT, none());
   }
 }

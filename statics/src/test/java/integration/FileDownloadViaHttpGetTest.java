@@ -143,8 +143,18 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
     Configuration.timeout = 1;
 
     File downloadedFile = $(byText("Download me")).download(using(HTTPGET)
-      .filter(withExtension("txt"))
-      .timeout(4000));
+      .withFilter(withExtension("txt"))
+      .withTimeout(4000));
+
+    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
+  }
+
+  @Test
+  void downloadWithCustomMethodButStandardTimeout() throws IOException {
+    Configuration.fileDownload = PROXY;
+    Configuration.timeout = 4000;
+
+    File downloadedFile = $(byText("Download me")).download(using(HTTPGET).withFilter(withExtension("txt")));
 
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }

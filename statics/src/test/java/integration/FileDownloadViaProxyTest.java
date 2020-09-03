@@ -147,8 +147,8 @@ class FileDownloadViaProxyTest extends IntegrationTest {
     Configuration.timeout = 1;
 
     File downloadedFile = $(byText("Download me")).download(using(PROXY)
-      .filter(withExtension("txt"))
-      .timeout(4000));
+      .withFilter(withExtension("txt"))
+      .withTimeout(4000));
 
     assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
