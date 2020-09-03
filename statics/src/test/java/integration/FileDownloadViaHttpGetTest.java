@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import static com.codeborne.selenide.DownloadOptions.using;
 import static com.codeborne.selenide.FileDownloadMode.HTTPGET;
+import static com.codeborne.selenide.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.files.FileFilters.withExtension;
@@ -133,5 +135,17 @@ class FileDownloadViaHttpGetTest extends IntegrationTest {
     File downloadedFile = $(byText("Download a PDF")).download(withExtension("pdf"));
 
     assertThat(downloadedFile.getName()).isEqualTo("minimal.pdf");
+  }
+
+  @Test
+  void downloadWithOptions() throws IOException {
+    Configuration.fileDownload = PROXY;
+    Configuration.timeout = 1;
+
+    File downloadedFile = $(byText("Download me")).download(using(HTTPGET)
+      .filter(withExtension("txt"))
+      .timeout(4000));
+
+    assertThat(downloadedFile.getName()).isEqualTo("hello_world.txt");
   }
 }
