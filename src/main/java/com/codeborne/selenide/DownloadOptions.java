@@ -6,11 +6,13 @@ import static com.codeborne.selenide.files.FileFilters.none;
 
 public class DownloadOptions {
   private final FileDownloadMode method;
-  private long timeout = -1;
-  private FileFilter filter = none();
+  private final long timeout;
+  private final FileFilter filter;
 
-  private DownloadOptions(FileDownloadMode method) {
+  private DownloadOptions(FileDownloadMode method, long timeout, FileFilter filter) {
     this.method = method;
+    this.timeout = timeout;
+    this.filter = filter;
   }
 
   public FileDownloadMode method() {
@@ -26,16 +28,19 @@ public class DownloadOptions {
   }
 
   public DownloadOptions timeout(long timeout) {
-    this.timeout = timeout;
-    return this;
+    return new DownloadOptions(method, timeout, filter);
   }
 
   public DownloadOptions filter(FileFilter filter) {
-    this.filter = filter;
-    return this;
+    return new DownloadOptions(method, timeout, filter);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("method=%s, timeout=%s ms, filter='%s'", method, timeout, filter.description());
   }
 
   public static DownloadOptions using(FileDownloadMode method) {
-    return new DownloadOptions(method);
+    return new DownloadOptions(method, -1, none());
   }
 }

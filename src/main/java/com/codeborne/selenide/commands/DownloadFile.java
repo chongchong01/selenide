@@ -49,7 +49,7 @@ public class DownloadFile implements Command<File> {
     Config config = linkWithHref.driver().config();
     DownloadOptions options = getDownloadOptions(config, args);
 
-    log.debug("fileDownloadMode={}, timeout={} ms, fileFilter='{}'", config.fileDownload(), options.timeout(), options.filter().description());
+    log.debug("Download file: {}", options);
 
     switch (options.method()) {
       case HTTPGET: {
